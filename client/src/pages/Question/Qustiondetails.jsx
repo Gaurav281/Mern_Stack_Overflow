@@ -1,6 +1,6 @@
 import copy from "copy-to-clipboard";
 import moment from "moment";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import Avatar from "../../Comnponent/Avatar/Avatar";
@@ -21,7 +21,7 @@ const Qustiondetails = () => {
   const user = useSelector((state) => state.currentuserreducer);
   const location = useLocation();
   const navigate = useNavigate();
-  const url = "https://mern-stack-overflow.onrender.com";
+  const url = "http://localhost:3000";
   const handlepostans = (e, answerlength) => {
     e.preventDefault();
     if (user === null) {
