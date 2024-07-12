@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/user": {
-        target: "http://localhost:5000", // Adjust to your backend server's address and port
+        target: "https://mern-stack-overflow.onrender.com", // Adjust to your backend server's address and port
         changeOrigin: true,
       },
     },
