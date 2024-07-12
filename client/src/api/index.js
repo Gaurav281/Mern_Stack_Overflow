@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://mern-stack-overflow.onrender.com",
+  baseURL: "http://localhost:5000",
 });
 
 API.interceptors.request.use((req) => {
@@ -30,3 +30,5 @@ export const postanswer = (id, noofanswers, answerbody, useranswered) =>
   API.patch(`/answer/post/${id}`, { noofanswers, answerbody, useranswered });
 export const deleteanswer = (id, answerid, noofanswers) =>
   API.patch(`/answer/delete/${id}`, { answerid, noofanswers });
+
+export const verifyOtp = (otpData) => API.post("user/verifyOtp", otpData); // Add this line
