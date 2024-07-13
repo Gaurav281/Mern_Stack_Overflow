@@ -31,4 +31,5 @@ export const postanswer = (id, noofanswers, answerbody, useranswered) =>
 export const deleteanswer = (id, answerid, noofanswers) =>
   API.patch(`/answer/delete/${id}`, { answerid, noofanswers });
 
-export const verifyOtp = (otpData) => API.post("user/verifyOtp", otpData); // Add this line
+export const verifyOtp = (otpData) => API.post("user/verifyOtp", otpData);
+export const getLoginHistory = () => API.get("/user/loginHistory");

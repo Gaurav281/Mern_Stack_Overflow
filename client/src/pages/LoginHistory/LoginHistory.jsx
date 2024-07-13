@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import "./LoginHistory.css"; // Import your CSS file
+import { getLoginHistory } from "../../api/index";
+import "./LoginHistory.css";
 
 const LoginHistory = () => {
   const [loginHistory, setLoginHistory] = useState([]);
@@ -9,17 +9,7 @@ const LoginHistory = () => {
   useEffect(() => {
     const fetchLoginHistory = async () => {
       try {
-        const token = JSON.parse(localStorage.getItem("Profile"))?.token;
-        if (!token) {
-          throw new Error("No token found");
-        }
-
-        const response = await axios.get("/user/loginHistory", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
+        const response = await getLoginHistory();
         console.log("Fetched login history:", response.data);
         setLoginHistory(response.data);
       } catch (error) {
