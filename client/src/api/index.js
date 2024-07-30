@@ -13,8 +13,8 @@ import axios from "axios";
 // const auth = getAuth(app);
 
 const API = axios.create({
-  baseURL: "http://localhost:5000",
-  // baseURL: "https://mern-stack-overflow.onrender.com",
+  // baseURL: "http://localhost:5000",
+  baseURL: "https://mern-stack-overflow.onrender.com",
 });
 
 API.interceptors.request.use((req) => {

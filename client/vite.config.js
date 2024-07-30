@@ -7,8 +7,8 @@ export default defineConfig({
   server: {
     proxy: {
       "/user": {
-        target: "http://localhost:5000",
-        // target: "https://mern-stack-overflow.onrender.com",
+        // target: "http://localhost:5000",
+        target: "https://mern-stack-overflow.onrender.com",
         changeOrigin: true,
       },
     },
