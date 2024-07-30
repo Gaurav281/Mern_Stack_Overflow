@@ -10,7 +10,7 @@ const LoginHistory = () => {
     const fetchLoginHistory = async () => {
       try {
         const response = await getLoginHistory();
-        console.log("Fetched login history:", response.data);
+        // console.log("Fetched login history:", response.data);
         setLoginHistory(response.data);
       } catch (error) {
         console.error("Error fetching login history:", error);

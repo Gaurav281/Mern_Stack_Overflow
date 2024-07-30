@@ -8,6 +8,7 @@ import {
 } from "redux";
 import { thunk } from "redux-thunk";
 import App from "./App";
+import "./i18n";
 import "./index.css";
 import reducers from "./reducers";
 // import reportWebVitals from "./reportWebVitals";

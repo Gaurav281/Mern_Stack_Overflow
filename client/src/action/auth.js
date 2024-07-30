@@ -1,3 +1,4 @@
+import "react-toastify/dist/ReactToastify.css";
 import * as api from "../api";
 import { setcurrentuser } from "./currentuser";
 import { fetchallusers } from "./users";
@@ -53,3 +54,22 @@ export const fetchLoginHistory = () => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const forgotPassword = (email, callback) => async (dispatch) => {
+  try {
+    const { data } = await api.forgotPassword(email);
+    callback(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const resetPassword =
+  (id, token, password, callback) => async (dispatch) => {
+    try {
+      const { data } = await api.resetPassword(id, token, password);
+      callback(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };

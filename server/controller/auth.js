@@ -1,4 +1,3 @@
-// controllers/auth.js
 import bcrypt from "bcryptjs";
 import { detect } from "detect-browser";
 import jwt from "jsonwebtoken";
@@ -33,8 +32,9 @@ export const signup = async (req, res) => {
     });
 
     const browser = detect(req.headers["user-agent"]);
-    if (browser.name !== "edge") {
+    if (browser.name !== "edge-chromium") {
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      console.log(`${otp}`);
       newUser.otp = otp;
       await newUser.save();
 
@@ -65,7 +65,9 @@ export const signup = async (req, res) => {
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
-      return res.status(200).json({ result: newUser, token });
+      return res
+        .status(200)
+        .json({ message: "Signup successful", result: newUser, token });
     }
   } catch (error) {
     res.status(500).json("Something went wrong...");
@@ -91,7 +93,7 @@ export const login = async (req, res) => {
 
     // Get IP address using request-ip
     const ip = requestIp.getClientIp(req);
-    const formattedIp = formatIpAddress(ip); // Format the IP address
+    const formattedIp = formatIpAddress(ip);
 
     existingUser.loginHistory.push({
       ip: formattedIp,
@@ -103,7 +105,7 @@ export const login = async (req, res) => {
 
     // Implement time and browser-based restrictions
     if (
-      browser.type === "mobile" &&
+      browser.os === "Android OS" &&
       !(new Date().getHours() >= 10 && new Date().getHours() <= 13)
     ) {
       return res.status(403).json({
@@ -111,8 +113,21 @@ export const login = async (req, res) => {
       });
     }
 
-    if (browser.name === "chrome") {
+    if (browser.name === "edge-chromium") {
+      // Edge users get a token directly
+      const token = jwt.sign(
+        { email: existingUser.email, id: existingUser._id },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+      await existingUser.save();
+      return res
+        .status(200)
+        .json({ message: "Login successful", result: existingUser, token });
+    } else {
+      // Non-Edge users receive an OTP
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      console.log(`${otp}`);
       existingUser.otp = otp;
       await existingUser.save();
 
@@ -137,16 +152,6 @@ export const login = async (req, res) => {
         }
         return res.status(200).json({ message: "OTP sent to email" });
       });
-    } else if (browser.name === "edge") {
-      const token = jwt.sign(
-        { email: existingUser.email, id: existingUser._id },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-      );
-      await existingUser.save();
-      return res.status(200).json({ result: existingUser, token });
-    } else {
-      return res.status(400).json({ message: "Unsupported browser" });
     }
   } catch (error) {
     res.status(500).json("Something went wrong...");
@@ -170,21 +175,54 @@ export const verifyOtp = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ result: existingUser, token });
+    res.status(200).json({
+      message: "OTP verified successfully",
+      result: existingUser,
+      token,
+    });
   } catch (error) {
     res.status(500).json("Something went wrong...");
   }
 };
 
-export const getLoginHistory = async (req, res) => {
-  try {
-    const userId = req.userid;
-    const user = await users.findById(userId).select("loginHistory");
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    res.status(200).json(user.loginHistory);
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-  }
-};
+// export const getLoginHistory = async (req, res) => {
+//   try {
+//     const userId = req.userid;
+//     const user = await users.findById(userId).select("loginHistory");
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+//     res.status(200).json(user.loginHistory);
+//   } catch (error) {
+//     res.status(500).json({ message: "Something went wrong" });
+//   }
+// };
+
+// export const reset = async (req, res) => {
+//   const { email, pass1 } = req.body;
+
+//   const existinguser = await users.findOne({ email });
+//   try {
+//     if (!existinguser) {
+//       return res.status(404).send("User does not exists, Sign up first");
+//     } else {
+//       if (pass1.length < 5) {
+//         return res
+//           .status(406)
+//           .send("Password should atleast 5 characters long");
+//       }
+
+//       const _id = existinguser._id;
+
+//       const hashedPassword = await bcrypt.hash(pass1, 12);
+
+//       await users.findByIdAndUpdate(_id, {
+//         $set: { password: hashedPassword },
+//       });
+//     }
+//     return res.status(200).send("Password Updated successfully");
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json("Something went wrong...");
+//   }
+// };

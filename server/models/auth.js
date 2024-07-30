@@ -16,7 +16,10 @@ const userSchema = new mongoose.Schema({
   tags: { type: [String] },
   joinedon: { type: Date, default: Date.now },
   loginHistory: [loginHistorySchema],
+  phoneNumber: { type: String, required: false },
+  firebaseToken: { type: String, required: false },
   otp: { type: String, required: false },
+  otpExpiry: { type: Date, required: false },
 });
 
 export default mongoose.model("User", userSchema);

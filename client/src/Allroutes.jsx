@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Askquestion from "./pages/Askquestion/Askquestion";
 import Auth from "./pages/Auth/Auth";
+import Forgotpassword from "./pages/ForgetPassword/ForgetPassword";
 import Home from "./pages/Home/Home";
 import LoginHistory from "./pages/LoginHistory/LoginHistory";
 import Displayquestion from "./pages/Question/Displayquestion";
@@ -43,6 +44,7 @@ function Allroutes({ slidein, handleslidein }) {
         }
       />
       <Route path="/History" element={<LoginHistory />} />
+      <Route path="/forgotpassword" element={<Forgotpassword />}></Route>
     </Routes>
   );
 }

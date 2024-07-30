@@ -1,0 +1,59 @@
+/* ForgetPassword.css */
+.forget-password-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+.forget-password-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+.forget-password-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.forget-password-container label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.forget-password-container input[type="email"],
+.forget-password-container input[type="password"],
+.forget-password-container input[type="text"] {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+.forget-password-container button {
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.forget-password-container button:hover {
+  background-color: #0056b3;
+}
+
+.forget-password-container p {
+  text-align: center;
+  color: #d9534f;
+  font-weight: bold;
+}

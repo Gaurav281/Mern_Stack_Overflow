@@ -1,6 +1,7 @@
 import copy from "copy-to-clipboard";
 import moment from "moment";
-import React, { useState } from "react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import Avatar from "../../Comnponent/Avatar/Avatar";
@@ -13,7 +14,12 @@ import downvote from "../../assets/sort-down.svg";
 import upvote from "../../assets/sort-up.svg";
 import Displayanswer from "./Displayanswer";
 import "./Question.css";
+
 const Qustiondetails = () => {
+  const { t } = useTranslation();
+  const answer_post_data = t("answer_post_data").split("+");
+  const [asked, answers, your_ans, browse, ask_own] = answer_post_data;
+
   const [answer, setanswer] = useState("");
   const dispatch = useDispatch();
   const questionlist = useSelector((state) => state.questionreducer);
@@ -21,28 +27,31 @@ const Qustiondetails = () => {
   const user = useSelector((state) => state.currentuserreducer);
   const location = useLocation();
   const navigate = useNavigate();
-  const url = "https://mern-stack-overflow.onrender.com";
+  const url = "http://localhost:5000";
+  // const url = "https://mern-stack-overflow.onrender.com";
+
   const handlepostans = (e, answerlength) => {
     e.preventDefault();
-    if (user === null) {
+    if (!user || !user.result) {
       alert("Login or Signup to answer a question");
       navigate("/Auth");
     } else {
       if (answer === "") {
         alert("Enter an answer before submitting");
       } else {
-        dispatch(
-          postanswer({
-            id,
-            noofanswers: answerlength + 1,
-            answerbody: answer,
-            useranswered: user.result.name,
-          })
-        );
+        const answerData = {
+          id,
+          noofanswers: answerlength + 1,
+          answerbody: answer,
+          useranswered: user.result.name || "Anonymous",
+        };
+        console.log("Answer data: ", answerData);
+        dispatch(postanswer(answerData));
         setanswer("");
       }
     }
   };
+
   const handleshare = () => {
     copy(url + location.pathname);
     alert("Copied url :" + url + location.pathname);
@@ -51,22 +60,25 @@ const Qustiondetails = () => {
   const handledelete = () => {
     dispatch(deletequestion(id, navigate));
   };
+
   const handleupvote = () => {
-    if (user === null) {
-      alert("Login or Signup to answer a question");
+    if (!user) {
+      alert("Login or Signup to upvote a question");
       navigate("/Auth");
     } else {
       dispatch(votequestion(id, "upvote"));
     }
   };
+
   const handledownvote = () => {
-    if (user === null) {
-      alert("Login or Signup to answer a question");
+    if (!user) {
+      alert("Login or Signup to downvote a question");
       navigate("/Auth");
     } else {
       dispatch(votequestion(id, "downvote"));
     }
   };
+
   return (
     <div className="question-details-page">
       {questionlist.data === null ? (
@@ -107,16 +119,18 @@ const Qustiondetails = () => {
                       <div className="question-actions-user">
                         <div>
                           <button type="button" onClick={handleshare}>
-                            Share
+                            {t("share")}
                           </button>
                           {user?.result?._id === question?.userid && (
                             <button type="button" onClick={handledelete}>
-                              Delete
+                              {t("delete")}
                             </button>
                           )}
                         </div>
                         <div>
-                          <p>Asked {moment(question.askedon).fromNow()}</p>
+                          <p>
+                            {asked} {moment(question.askedon).fromNow()}
+                          </p>
                           <Link
                             to={`Users/${question.userid}`}
                             className="user-limk"
@@ -139,7 +153,9 @@ const Qustiondetails = () => {
                 </section>
                 {question.noofanswers !== 0 && (
                   <section>
-                    <h3>{question.noofanswers} Answers</h3>
+                    <h3>
+                      {question.noofanswers} {answers}
+                    </h3>
                     <Displayanswer
                       key={question._id}
                       question={question}
@@ -148,7 +164,7 @@ const Qustiondetails = () => {
                   </section>
                 )}
                 <section className="post-ans-container">
-                  <h3>Your Answer</h3>
+                  <h3>{your_ans}</h3>
                   <form
                     onSubmit={(e) => {
                       handlepostans(e, question.answer.length);
@@ -159,18 +175,18 @@ const Qustiondetails = () => {
                       id=""
                       cols="30"
                       rows="10"
-                      vlaue={answer}
+                      value={answer}
                       onChange={(e) => setanswer(e.target.value)}
                     ></textarea>
                     <br />
                     <input
                       type="submit"
                       className="post-ans-btn"
-                      value="Post your Answer"
+                      value={your_ans}
                     />
                   </form>
                   <p>
-                    Browse other Question tagged
+                    {browse}
                     {question.questiontags.map((tag) => (
                       <Link to="/Tags" key={tag} className="ans-tag">
                         {" "}
@@ -183,7 +199,7 @@ const Qustiondetails = () => {
                       style={{ textDecoration: "none", color: "#009dff" }}
                     >
                       {" "}
-                      Ask your own question
+                      {ask_own}
                     </Link>
                   </p>
                 </section>
