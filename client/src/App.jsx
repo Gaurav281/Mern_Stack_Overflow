@@ -6,7 +6,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { setcurrentuser } from "./action/currentuser";
 import { fetchallquestion } from "./action/question";
 import { fetchallusers } from "./action/users";
-import AlertModal from "./AlertModal";
+import AlertModal from "./AlertModal/AlertModal";
 import Allroutes from "./Allroutes";
 import "./App.css";
 import Navbar from "./Comnponent/Navbar/navbar";
