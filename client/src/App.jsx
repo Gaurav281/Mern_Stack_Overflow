@@ -1,5 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
+import { isMobile } from "react-device-detect";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
 import { setcurrentuser } from "./action/currentuser";
@@ -11,6 +12,20 @@ import Navbar from "./Comnponent/Navbar/navbar";
 import i18n from "./i18n";
 function App() {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const checkAccessTime = () => {
+      const currentHour = new Date().getHours();
+      const isAccessTime = currentHour >= 10 && currentHour < 13; // 10 A.M. to 1 P.M.
+
+      if (!isAccessTime && isMobile) {
+        alert("You cannot access the website at this time.");
+      }
+    };
+
+    checkAccessTime();
+  }, []);
+
   let target_lang = localStorage.getItem("i18nextLng");
   if (target_lang !== null) {
     i18n.changeLanguage(target_lang);

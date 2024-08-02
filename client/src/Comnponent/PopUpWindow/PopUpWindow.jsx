@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 // import PhoneInput from "react-phone-input-2";
-// import "react-phone-input-2/lib/style.css";
+import "react-phone-input-2/lib/style.css";
 import { sendOtpToEmail } from "../../api";
 import "./PopUpWindow.css"; // Import the CSS file
 
@@ -12,7 +12,6 @@ function PopUpWindow({ selectedLanguage, applyLanguageChange, setShowPopUp }) {
   const handleSendOtp = async () => {
     const profile = JSON.parse(localStorage.getItem("Profile"));
     if (!profile) return;
-
     const email = profile?.result?.email;
     // const existingPhoneNumber = profile?.result?.phoneNumber;
 
@@ -20,12 +19,12 @@ function PopUpWindow({ selectedLanguage, applyLanguageChange, setShowPopUp }) {
       alert("Please Wait Sending OTP");
       await sendOtpToEmail(email);
       alert("OTP send to registered Email");
-    } // else {
+    } //else {
     //   if (!existingPhoneNumber && !phoneNumber) {
     //     alert("Please enter your phone number.");
     //     return;
     //   }
-    //   await sendOtpToPhone(phoneNumber || existingPhoneNumber);
+    //   await sendOtpToPhoneWithToken(phoneNumber || existingPhoneNumber);
     // }
   };
 
@@ -64,7 +63,7 @@ function PopUpWindow({ selectedLanguage, applyLanguageChange, setShowPopUp }) {
           onChange={handleChange}
         />
         <button onClick={handleSubmit}>Verify OTP</button>
-        {/* <div id="recaptcha-container"></div> */}
+        <div id="recaptcha-container"></div>
       </div>
     </div>
   );

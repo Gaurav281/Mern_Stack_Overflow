@@ -35,15 +35,15 @@ export const sendOtpToEmail = async (email) => {
     throw error;
   }
 };
-export const sendOtpToPhone = async (email) => {
-  try {
-    const response = await API.post("/user/sendOtpEmail", { email });
-    return response.data;
-  } catch (error) {
-    console.error("Error sending OTP to email:", error);
-    throw error;
-  }
-};
+// export const sendOtpToPhone = async (email) => {
+//   try {
+//     const response = await API.post("/user/sendOtpEmail", { email });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error sending OTP to email:", error);
+//     throw error;
+//   }
+// };
 // export const sendOtpToPhoneWithToken = async (phoneNumber) => {
 //   try {
 //     if (!window.recaptchaVerifier) {
